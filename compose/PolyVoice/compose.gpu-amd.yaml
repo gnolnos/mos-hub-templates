@@ -1,0 +1,18 @@
+# GPU override (AMD / ROCm) cho PolyVoice — gộp khi triển khai:
+#   docker compose -f compose.yaml -f compose.gpu-amd.yaml ... up -d
+# Cần gắn /dev/kfd + /dev/dri (hoặc thụt theo máy) và image Ollama ROCm.
+services:
+  ollama:
+    # Chuyển sang image ROCm (đặt llm_iamge tương ứng nếu dùng .env)
+    image: ollama/ollama:rocm
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+      - render
+    security_opt:
+      - seccomp:unconfined
+    ipc: host
+  # Lưu ý: WhisperX hiện chưa hỗ trợ AMD ROCm chính thức —
+  # giữ DEVICE=cpu/int8 (mặc định) trên máy AMD, hoặc dùng llama/whisper.cpp backend.

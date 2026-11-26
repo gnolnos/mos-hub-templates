@@ -1,0 +1,8 @@
+{
+  "name": "PolyVoice",
+  "description": "Chain lồng tiếng đa ngôn ngữ (dubbing pipeline) trên MOS: ASR tiếng Việt + WhisperX đa ngôn ngữ/diarization, TTS Piper + REST bridge, LLM Ollama (dịch/viết thoại). Chạy tốt trên CPU; hỗ trợ GPU NVIDIA (mặc định qua ollama) và AMD/ROCm (compose.gpu-amd.yaml). WebUI: WhisperX /docs.",
+  "icon": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/images/polyvoice.png",
+  "webui": "http://{IP}:9000/docs",
+  "category": ["AI", "Media"],
+  "readme_url": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/compose/PolyVoice/README.md"
+}

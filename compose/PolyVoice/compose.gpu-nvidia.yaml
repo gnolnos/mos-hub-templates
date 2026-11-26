@@ -1,0 +1,26 @@
+# GPU override (NVIDIA) cho PolyVoice — gộp khi triển khai:
+#   docker compose -f compose.yaml -f compose.gpu-nvidia.yaml ... up -d
+# ou bên MOS: đổi LLM_IMAGE=/ollama và bật nvidia runtime.
+services:
+  ollama:
+    # Ollama :latest tự dò NVIDIA GPU — thêm runtime bằng deploy nếu cần
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  whisperx:
+    # WhisperX trên NVIDIA GPU
+    environment:
+      - DEVICE=cuda
+      - COMPUTE_TYPE=float16
+      - BATCH_SIZE=4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

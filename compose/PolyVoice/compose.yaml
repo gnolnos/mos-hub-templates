@@ -1,0 +1,108 @@
+services:
+  # =============================================================
+  # PolyVoice - chain lồng tiếng đa ngôn ngữ (dubbing pipeline)
+  #   WhisperX (ASR đa ngôn ngữ + diarization)
+  #   WyViet (ASR tiếng Việt, REST /transcribe)
+  #   Piper + bridge (Piper Wyoming TTS -> REST)
+  #   Ollama (LLM: dịch / viết kịch bản / xử lý lời thoại)
+  # Chạy tốt trên CPU. GPU: NVIDIA hoặc AMD/ROCm, xem compose.gpu-*.yaml
+  # =============================================================
+
+  # ---- ASR đa ngôn ngữ + word timestamps + diarization --------
+  whisperx:
+    image: learnedmachine/whisperx-asr-service:latest
+    container_name: polyvoice-whisperx
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DEVICE=cpu
+      - COMPUTE_TYPE=int8
+      - BATCH_SIZE=2
+      - PRELOAD_MODEL=${WHISPERX_MODEL:-small}
+      - MAX_FILE_SIZE_MB=1000
+    volumes:
+      - ${APP_DATA}/whisperx/cache:/.cache
+      - ${APP_DATA}/whisperx/jobs:/tmp/whisperx-jobs
+    ports:
+      - "${WHISPERX_PORT:-9000}:9000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:9000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks: [polyvoice]
+
+  # ---- ASR tiếng Việt (REST /transcribe cho chain) ------------
+  wyviet-asr:
+    image: gnolnos/wyoming-vietnamese-asr:latest
+    container_name: polyvoice-wyviet-asr
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MODE=fastapi
+      - HF_MODEL_ID=${ASR_MODEL:-hynt/Zipformer-30M-RNNT-6000h}
+      - HF_TOKEN=${HF_TOKEN}
+      - PROVIDER=cpu
+      - USE_INT8=${ASR_INT8:-true}
+      - NUM_THREADS=${ASR_THREADS:-4}
+      - SERVER_PORT=10400
+      - API_PORT=8090
+    volumes:
+      - ${APP_DATA}/wyviet-asr/model:/config/model
+    ports:
+      - "${ASR_API_PORT:-8090}:8090"
+      - "${ASR_WYOMING_PORT:-10400}:10400"
+    networks: [polyvoice]
+
+  # ---- TTS: Piper (Wyoming TCP) + REST bridge ------------------
+  piper:
+    image: rhasspy/wyoming-piper:latest
+    container_name: polyvoice-piper
+    restart: unless-stopped
+    env_file: .env
+    command: >-
+      --voice ${PIPER_VOICE:-vi_VN-vais1000-medium}
+      --uri 'tcp://0.0.0.0:10200'
+      --data-dir /data
+      --download-dir /data
+    volumes:
+      - ${APP_DATA}/piper/data:/data
+    ports:
+      - "${PIPER_PORT:-10200}:10200"
+    networks: [polyvoice]
+
+  piper-bridge:
+    image: gnolnos/piper-fastapi-wrapper:latest
+    container_name: polyvoice-piper-bridge
+    restart: unless-stopped
+    depends_on:
+      - piper
+    env_file: .env
+    environment:
+      - PIPER_HOST=piper
+      - PIPER_PORT=10200
+      - VOICE=${PIPER_VOICE:-vi_VN-vais1000-medium}
+      - VOICE_LANGUAGES=${PIPER_LANGS:-vi,vi_VN}
+      - API_HOST=0.0.0.0
+      - API_PORT=5002
+    ports:
+      - "${PIPER_API_PORT:-5002}:5002"
+    networks: [polyvoice]
+
+  # ---- LLM: Ollama (tự dò NVIDIA GPU; AMD cần compose.gpu-amd.yaml)
+  ollama:
+    image: ${LLM_IMAGE:-ollama/ollama:latest}
+    container_name: polyvoice-ollama
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ${APP_DATA}/ollama:/root/.ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    networks: [polyvoice]
+
+networks:
+  polyvoice:
+    name: polyvoice
+    driver: bridge

@@ -10,7 +10,7 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:9000]/docs",
-  "icon": "https://raw.githubusercontent.com/m-bain/whisperX/main/assets/logo.png",
+  "icon": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/images/whisperx.png",
   "category": "AI",
   "project": "https://github.com/murtaza-nasir/whisperx-asr-service",
   "support": "https://github.com/murtaza-nasir/whisperx-asr-service/issues",

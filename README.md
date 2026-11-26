@@ -15,6 +15,12 @@ In MOS: **Settings → System Configuration → MOS Hub Settings** → add `http
 | [Wyoming Vietnamese ASR](https://github.com/gnolnos/Wyoming-Vietnamese-ASR) | 10400 / 8090 | `gnolnos/wyoming-vietnamese-asr:latest` | AI | Vietnamese STT; `MODE=wyoming` or `MODE=fastapi` |
 | [WhisperX ASR Service](https://github.com/murtaza-nasir/whisperx-asr-service) | 9000 | `learnedmachine/whisperx-asr-service:latest` | AI | Word timestamps + diarization; needs `HF_TOKEN` |
 
+### Compose stacks
+
+| Stack | Service | Ports | Notes |
+|-------|---------|-------|-------|
+| [PolyVoice](compose/PolyVoice/README.md) | dubbing pipeline: WhisperX + WyViet-ASR + Piper + bridge + Ollama | 9000, 8090/10400, 5002, 10200, 11434 | Chain lồng tiếng đa ngôn ngữ; CPU, NVIDIA GPU, AMD/ROCm |
+
 ## Repository layout
 
 ```
@@ -23,10 +29,20 @@ docker/            # single-container templates (one JSON per app)
   PiperFastAPIWrapper.json
   WyomingVietnameseASR.json
   WhisperX.json
+compose/           # multi-container stacks (one subfolder per app)
+  PolyVoice/
+    compose.yaml
+    compose.gpu-nvidia.yaml
+    compose.gpu-amd.yaml
+    .env
+    template.json
+    README.md
 images/            # PNG/JPG icons referenced by the JSON templates
   gnolnos-portfolio.png
   piper-tts-bridge.png
+  whisperx.png
   wyoming-vietnamese-asr.png
+  polyvoice.png
 maintainer.json    # REQUIRED — the Hub ignores repos without this file
 README.md
 ```
