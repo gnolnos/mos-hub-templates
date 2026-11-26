@@ -1,0 +1,87 @@
+{
+  "name": "Piper FastAPI Wrapper (TTS Bridge)",
+  "repo": "gnolnos/piper-fastapi-wrapper:latest",
+  "registry": "https://hub.docker.com/r/gnolnos/piper-fastapi-wrapper",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "bash",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:5002]/docs",
+  "icon": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/images/piper-tts-bridge.png",
+  "category": "AI",
+  "project": "https://github.com/gnolnos/piper-fastapi-wrapper",
+  "support": "https://github.com/gnolnos/piper-fastapi-wrapper/issues",
+  "readme_url": "https://github.com/gnolnos/piper-fastapi-wrapper#readme",
+  "description": "Piper FastAPI Wrapper (TTS bridge) - wraps a Piper Wyoming TCP server as a simple HTTP REST API. Endpoints: GET /health, GET /voices (filtered by VOICE_LANGUAGES), POST /tts -> audio/wav (streaming). Point PIPER_HOST/PIPER_PORT at an existing Piper server (default 192.168.100.112:10200) and set a default VOICE.",
+  "donate": "https://github.com/sponsors/gnolnos",
+  "requires": null,
+  "paths": [],
+  "ports": [
+    {
+      "name": "API",
+      "host": "5002",
+      "container": "5002",
+      "protocol": "tcp",
+      "description": "FastAPI + /docs.",
+      "required": true,
+      "mask": false
+    }
+  ],
+  "variables": [
+    {
+      "name": "Piper Host",
+      "key": "PIPER_HOST",
+      "value": "192.168.100.112",
+      "description": "Hostname/IP of the Piper Wyoming server.",
+      "required": true,
+      "mask": false,
+      "display": "always",
+      "default": "192.168.100.112"
+    },
+    {
+      "name": "Piper Port",
+      "key": "PIPER_PORT",
+      "value": "10200",
+      "description": "Port of the Piper Wyoming server.",
+      "required": true,
+      "mask": false,
+      "display": "always",
+      "default": "10200"
+    },
+    {
+      "name": "Default Voice",
+      "key": "VOICE",
+      "value": "",
+      "description": "Default voice name used by /tts when none specified.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": ""
+    },
+    {
+      "name": "Voice Language Filter",
+      "key": "VOICE_LANGUAGES",
+      "value": "vi,vi_VN",
+      "description": "Comma-separated language filter for /voices. Empty = list all (44+ languages). Prefix match: vi also matches vi_VN.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "vi,vi_VN"
+    },
+    {
+      "name": "API Port",
+      "key": "API_PORT",
+      "value": "5002",
+      "description": "HTTP port this bridge listens on.",
+      "required": true,
+      "mask": false,
+      "display": "always",
+      "default": "5002"
+    }
+  ],
+  "devices": [],
+  "labels": []
+}

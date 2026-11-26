@@ -1,0 +1,134 @@
+{
+  "name": "Wyoming Vietnamese ASR",
+  "repo": "gnolnos/wyoming-vietnamese-asr:latest",
+  "registry": "https://hub.docker.com/r/gnolnos/wyoming-vietnamese-asr",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "bash",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:8090]/health",
+  "icon": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/images/wyoming-vietnamese-asr.png",
+  "category": "AI",
+  "project": "https://github.com/gnolnos/Wyoming-Vietnamese-ASR",
+  "support": "https://github.com/gnolnos/Wyoming-Vietnamese-ASR/issues",
+  "readme_url": "https://github.com/gnolnos/Wyoming-Vietnamese-ASR#readme",
+  "description": "Wyoming Vietnamese ASR - local Vietnamese speech-to-text (RNNT Zipformer) server. MODE=wyoming runs Wyoming protocol on :10400 for Home Assistant Assistant Speech-to-Text; MODE=fastapi runs REST on :8090 (POST /transcribe, GET /health). Model auto-downloads from HuggingFace on first start if /config/model is empty.",
+  "donate": "https://github.com/sponsors/gnolnos",
+  "requires": null,
+  "paths": [
+    {
+      "name": "Model Storage",
+      "host": "/mnt/cache/appdata/wyoming-vietnamese-asr/model",
+      "container": "/config/model",
+      "description": "Persistent model storage. Auto-downloads the model here on first start if empty.",
+      "required": true
+    }
+  ],
+  "ports": [
+    {
+      "name": "Wyoming",
+      "host": "10400",
+      "container": "10400",
+      "protocol": "tcp",
+      "description": "Wyoming server port (MODE=wyoming).",
+      "required": false,
+      "mask": false
+    },
+    {
+      "name": "FastAPI",
+      "host": "8090",
+      "container": "8090",
+      "protocol": "tcp",
+      "description": "FastAPI REST port (MODE=fastapi).",
+      "required": false,
+      "mask": false
+    }
+  ],
+  "variables": [
+    {
+      "name": "Mode",
+      "key": "MODE",
+      "value": "wyoming",
+      "description": "Server mode: wyoming (port 10400) or fastapi (port 8090). Pick ONE.",
+      "required": true,
+      "mask": false,
+      "display": "always",
+      "default": "wyoming"
+    },
+    {
+      "name": "HF Model ID",
+      "key": "HF_MODEL_ID",
+      "value": "hynt/Zipformer-30M-RNNT-6000h",
+      "description": "HuggingFace model id to download on first start.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "hynt/Zipformer-30M-RNNT-6000h"
+    },
+    {
+      "name": "HF Token",
+      "key": "HF_TOKEN",
+      "value": null,
+      "description": "HuggingFace token, required for gated/private models.",
+      "required": false,
+      "mask": true,
+      "display": "always",
+      "default": null
+    },
+    {
+      "name": "Provider",
+      "key": "PROVIDER",
+      "value": "cpu",
+      "description": "Inference backend: cpu or cuda (NVIDIA GPU).",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "cpu"
+    },
+    {
+      "name": "Use INT8",
+      "key": "USE_INT8",
+      "value": "true",
+      "description": "Enable INT8 quantization. Set false with PROVIDER=cuda.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "true"
+    },
+    {
+      "name": "Num Threads",
+      "key": "NUM_THREADS",
+      "value": "4",
+      "description": "CPU threads for inference.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "4"
+    },
+    {
+      "name": "Wyoming Port",
+      "key": "SERVER_PORT",
+      "value": "10400",
+      "description": "Wyoming server port (MODE=wyoming).",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "10400"
+    },
+    {
+      "name": "FastAPI Port",
+      "key": "API_PORT",
+      "value": "8090",
+      "description": "FastAPI server port (MODE=fastapi).",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "8090"
+    }
+  ],
+  "devices": [],
+  "labels": []
+}

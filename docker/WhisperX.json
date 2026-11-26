@@ -11,7 +11,7 @@
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:9000]/docs",
   "icon": "https://raw.githubusercontent.com/m-bain/whisperX/main/assets/logo.png",
-  "category": "AI:Tools:Utilities",
+  "category": "AI",
   "project": "https://github.com/murtaza-nasir/whisperx-asr-service",
   "support": "https://github.com/murtaza-nasir/whisperx-asr-service/issues",
   "description": "WhisperX ASR Service: Automatic Speech Recognition with Word-Level Timestamps and Speaker Diarization. OpenAI-compatible endpoints (/v1/audio/transcriptions), speaker diarization, and model caching for a fully local transcription pipeline. On CPU hosts (Intel-only GPU) it runs in DEVICE=cpu mode with float32/int8; on NVIDIA hosts set DEVICE=cuda + COMPUTE_TYPE=float16.",
@@ -20,14 +20,14 @@
   "paths": [
     {
       "name": "Cache Dir",
-      "host": "/mnt/appdata/appdata/whisperx",
+      "host": "/mnt/cache/appdata/whisperx",
       "container": "/.cache",
       "description": "Persistent cache for WhisperX ASR + pyannote diarization models (enables offline use once downloaded).",
       "required": true
     },
     {
       "name": "Jobs Dir",
-      "host": "/mnt/appdata/appdata/whisperx/jobs",
+      "host": "/mnt/cache/appdata/whisperx/jobs",
       "container": "/tmp/whisperx-jobs",
       "description": "Per-request working files (uploaded + decoded audio). Use a volume with free space for long media.",
       "required": false

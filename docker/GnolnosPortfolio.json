@@ -1,0 +1,36 @@
+{
+  "name": "Gnolnos Portfolio",
+  "repo": "gnolnos/my-portfolio:latest",
+  "registry": "https://hub.docker.com/r/gnolnos/my-portfolio",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "bash",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:80]",
+  "icon": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/images/gnolnos-portfolio.png",
+  "category": "Hosting",
+  "project": "https://github.com/gnolnos/gnolnos-Portfolio",
+  "support": "https://github.com/gnolnos/gnolnos-Portfolio/issues",
+  "readme_url": "https://github.com/gnolnos/gnolnos-Portfolio#readme",
+  "description": "Gnolnos personal portfolio - a static React/Vite/Tailwind single-page site served by Nginx. The published content (Formspree ID, Jellyfin API key, social links) is baked in at image build time from data/config.json in the source repo.",
+  "donate": "https://github.com/sponsors/gnolnos",
+  "requires": null,
+  "paths": [],
+  "ports": [
+    {
+      "name": "HTTP",
+      "host": "80",
+      "container": "80",
+      "protocol": "tcp",
+      "description": "Nginx web server.",
+      "required": true,
+      "mask": false
+    }
+  ],
+  "variables": [],
+  "devices": [],
+  "labels": []
+}
