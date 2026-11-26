@@ -1,0 +1,111 @@
+{
+  "name": "WhisperX",
+  "repo": "learnedmachine/whisperx-asr-service:latest",
+  "registry": "https://hub.docker.com/r/learnedmachine/whisperx-asr-service",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "bash",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:9000]/docs",
+  "icon": "https://raw.githubusercontent.com/m-bain/whisperX/main/assets/logo.png",
+  "category": "AI:Tools:Utilities",
+  "project": "https://github.com/murtaza-nasir/whisperx-asr-service",
+  "support": "https://github.com/murtaza-nasir/whisperx-asr-service/issues",
+  "description": "WhisperX ASR Service: Automatic Speech Recognition with Word-Level Timestamps and Speaker Diarization. OpenAI-compatible endpoints (/v1/audio/transcriptions), speaker diarization, and model caching for a fully local transcription pipeline. On CPU hosts (Intel-only GPU) it runs in DEVICE=cpu mode with float32/int8; on NVIDIA hosts set DEVICE=cuda + COMPUTE_TYPE=float16.",
+  "donate": null,
+  "requires": null,
+  "paths": [
+    {
+      "name": "Cache Dir",
+      "host": "/mnt/appdata/appdata/whisperx",
+      "container": "/.cache",
+      "description": "Persistent cache for WhisperX ASR + pyannote diarization models (enables offline use once downloaded).",
+      "required": true
+    },
+    {
+      "name": "Jobs Dir",
+      "host": "/mnt/appdata/appdata/whisperx/jobs",
+      "container": "/tmp/whisperx-jobs",
+      "description": "Per-request working files (uploaded + decoded audio). Use a volume with free space for long media.",
+      "required": false
+    }
+  ],
+  "ports": [
+    {
+      "name": "API - WebUI",
+      "host": "9000",
+      "container": "9000",
+      "protocol": "tcp",
+      "description": "WhisperX ASR REST API + /docs.",
+      "required": true,
+      "mask": false
+    }
+  ],
+  "variables": [
+    {
+      "name": "HF Token (diarization)",
+      "key": "HF_TOKEN",
+      "value": null,
+      "description": "Hugging Face read token (hf_...). REQUIRED for speaker diarization. Must accept agreements for pyannote/speaker-diarization-community-1, pyannote/speaker-diarization-3.1, pyannote/segmentation-3.0.",
+      "required": true,
+      "mask": true,
+      "display": "always",
+      "default": null
+    },
+    {
+      "name": "Device",
+      "key": "DEVICE",
+      "value": "cpu",
+      "description": "cuda (NVIDIA GPU) or cpu. This host has no NVIDIA GPU -> cpu.",
+      "required": true,
+      "mask": false,
+      "display": "always",
+      "default": "cpu"
+    },
+    {
+      "name": "Compute Type",
+      "key": "COMPUTE_TYPE",
+      "value": "int8",
+      "description": "float16 (GPU), float32 (CPU), int8 (CPU, lower quality but faster).",
+      "required": true,
+      "mask": false,
+      "display": "always",
+      "default": "int8"
+    },
+    {
+      "name": "Batch Size",
+      "key": "BATCH_SIZE",
+      "value": "2",
+      "description": "Larger = faster but more memory. Default 16 on cuda, 2 on cpu.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "2"
+    },
+    {
+      "name": "Preload Model",
+      "key": "PRELOAD_MODEL",
+      "value": "small",
+      "description": "Model to load at startup (large-v3, small, medium, turbo, ...). Use 'small' on CPU hosts for reasonable speed.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "small"
+    },
+    {
+      "name": "Max File Size (MB)",
+      "key": "MAX_FILE_SIZE_MB",
+      "value": "1000",
+      "description": "Reject larger uploads to prevent OOM. Lower for small-memory hosts.",
+      "required": false,
+      "mask": false,
+      "display": "always",
+      "default": "1000"
+    }
+  ],
+  "devices": [],
+  "labels": []
+}
