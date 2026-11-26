@@ -15,7 +15,7 @@
   "project": "https://github.com/gnolnos/Wyoming-Vietnamese-ASR",
   "support": "https://github.com/gnolnos/Wyoming-Vietnamese-ASR/issues",
   "readme_url": "https://github.com/gnolnos/Wyoming-Vietnamese-ASR#readme",
-  "description": "Wyoming Vietnamese ASR - local Vietnamese speech-to-text (RNNT Zipformer) server. MODE=wyoming runs Wyoming protocol on :10400 for Home Assistant Assistant Speech-to-Text; MODE=fastapi runs REST on :8090 (POST /transcribe, GET /health). Model auto-downloads from HuggingFace on first start if /config/model is empty.",
+  "description": "Wyoming Vietnamese ASR - local Vietnamese speech-to-text (RNNT Zipformer) server. MODE=wyoming runs Wyoming protocol on :10301 for Home Assistant Assistant Speech-to-Text; MODE=fastapi runs REST on :8090 (POST /transcribe, GET /health). Model auto-downloads from HuggingFace on first start if /config/model is empty.",
   "donate": "https://github.com/sponsors/gnolnos",
   "requires": null,
   "paths": [
@@ -30,8 +30,8 @@
   "ports": [
     {
       "name": "Wyoming",
-      "host": "10400",
-      "container": "10400",
+      "host": "10301",
+      "container": "10301",
       "protocol": "tcp",
       "description": "Wyoming server port (MODE=wyoming).",
       "required": false,
@@ -52,7 +52,7 @@
       "name": "Mode",
       "key": "MODE",
       "value": "wyoming",
-      "description": "Server mode: wyoming (port 10400) or fastapi (port 8090). Pick ONE.",
+      "description": "Server mode: wyoming (port 10301) or fastapi (port 8090). Pick ONE.",
       "required": true,
       "mask": false,
       "display": "always",
@@ -111,12 +111,12 @@
     {
       "name": "Wyoming Port",
       "key": "SERVER_PORT",
-      "value": "10400",
+      "value": "10301",
       "description": "Wyoming server port (MODE=wyoming).",
       "required": false,
       "mask": false,
       "display": "always",
-      "default": "10400"
+      "default": "10301"
     },
     {
       "name": "FastAPI Port",

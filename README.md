@@ -12,14 +12,14 @@ In MOS: **Settings → System Configuration → MOS Hub Settings** → add `http
 |-----|---------|-------|----------|-------|
 | [Gnolnos Portfolio](https://github.com/gnolnos/gnolnos-Portfolio) | 80 | `gnolnos/my-portfolio:latest` | Hosting | Static React portfolio (Nginx) |
 | [Piper FastAPI Wrapper](https://github.com/gnolnos/piper-fastapi-wrapper) | 5002 | `gnolnos/piper-fastapi-wrapper:latest` | AI | REST TTS bridge → Piper Wyoming |
-| [Wyoming Vietnamese ASR](https://github.com/gnolnos/Wyoming-Vietnamese-ASR) | 10400 / 8090 | `gnolnos/wyoming-vietnamese-asr:latest` | AI | Vietnamese STT; `MODE=wyoming` or `MODE=fastapi` |
+| [Wyoming Vietnamese ASR](https://github.com/gnolnos/Wyoming-Vietnamese-ASR) | 10301 / 8090 | `gnolnos/wyoming-vietnamese-asr:latest` | AI | Vietnamese STT; `MODE=wyoming` or `MODE=fastapi` |
 | [WhisperX ASR Service](https://github.com/murtaza-nasir/whisperx-asr-service) | 9000 | `learnedmachine/whisperx-asr-service:latest` | AI | Word timestamps + diarization; needs `HF_TOKEN` |
 
 ### Compose stacks
 
 | Stack | Service | Ports | Notes |
 |-------|---------|-------|-------|
-| [PolyVoice](compose/PolyVoice/README.md) | dubbing pipeline: WhisperX + WyViet-ASR + Piper + bridge + Ollama | 9000, 8090/10400, 5002, 10200, 11434 | Chain lồng tiếng đa ngôn ngữ; CPU, NVIDIA GPU, AMD/ROCm |
+| [PolyVoice](compose/PolyVoice/README.md) | dubbing pipeline: WhisperX + WyViet-ASR + Piper + bridge + Ollama | 9000, 8090/10301, 5002, 10200, 11434 | Chain lồng tiếng đa ngôn ngữ; CPU, NVIDIA GPU, AMD/ROCm |
 
 ## Repository layout
 

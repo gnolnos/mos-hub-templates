@@ -7,7 +7,7 @@ Stack compose cho **MOS** (My Own Service OS) chạy chain xử lý giọng nói
 | Service | Image | Port | Vai trò |
 |---------|-------|------|---------|
 | `whisperx` | learnedmachine/whisperx-asr-service | 9000 | ASR đa ngôn ngữ + word timestamps + diarization (OpenAI-compatible /v1/audio/transcriptions + /docs) |
-| `wyviet-asr` | gnolnos/wyoming-vietnamese-asr | 8090 (REST) / 10400 (Wyoming) | ASR tiếng Việt chuyên dụng, model RNNT Zipformer, auto-download từ HuggingFace |
+| `wyviet-asr` | gnolnos/wyoming-vietnamese-asr | 8090 (REST) / 10301 (Wyoming) | ASR tiếng Việt chuyên dụng, model RNNT Zipformer, auto-download từ HuggingFace |
 | `piper` | rhasspy/wyoming-piper | 10200 | Piper Wyoming TCP server (hàng chục giọng, 44+ ngôn ngữ) |
 | `piper-bridge` | gnolnos/piper-fastapi-wrapper | 5002 | REST TTS bridge đơn giản: GET /health, GET /voices, POST /tts → audio/wav |
 | `ollama` | ollama/ollama | 11434 | LLM cục bộ: dịch thoại, viết kịch bản, xử lý văn bản trước khi TTS |

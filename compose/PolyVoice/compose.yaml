@@ -46,13 +46,13 @@ services:
       - PROVIDER=cpu
       - USE_INT8=${ASR_INT8:-true}
       - NUM_THREADS=${ASR_THREADS:-4}
-      - SERVER_PORT=10400
+      - SERVER_PORT=10301
       - API_PORT=8090
     volumes:
       - ${APP_DATA}/wyviet-asr/model:/config/model
     ports:
       - "${ASR_API_PORT:-8090}:8090"
-      - "${ASR_WYOMING_PORT:-10400}:10400"
+      - "${ASR_WYOMING_PORT:-10301}:10301"
     networks: [polyvoice]
 
   # ---- TTS: Piper (Wyoming TCP) + REST bridge ------------------
