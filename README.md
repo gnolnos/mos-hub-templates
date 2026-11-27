@@ -14,6 +14,7 @@ In MOS: **Settings → System Configuration → MOS Hub Settings** → add `http
 | [Piper FastAPI Wrapper](https://github.com/gnolnos/piper-fastapi-wrapper) | 5002 | `gnolnos/piper-fastapi-wrapper:latest` | AI | REST TTS bridge → Piper Wyoming |
 | [Wyoming Vietnamese ASR](https://github.com/gnolnos/Wyoming-Vietnamese-ASR) | 10301 / 8090 | `gnolnos/wyoming-vietnamese-asr:latest` | AI | Vietnamese STT; `MODE=wyoming` or `MODE=fastapi` |
 | [WhisperX ASR Service](https://github.com/murtaza-nasir/whisperx-asr-service) | 9000 | `learnedmachine/whisperx-asr-service:latest` | AI | Word timestamps + diarization; needs `HF_TOKEN` |
+| [Optimisarr (dev)](https://github.com/gnolnos/optimisarr) | 8787 | `ghcr.io/gnolnos/optimisarr:dev` | Media | FFmpeg optimiser DEV build (signed A/B streaming, live job detail) — test, not production |
 
 ### Compose stacks
 
@@ -28,6 +29,7 @@ docker/            # single-container templates (one JSON per app)
   GnolnosPortfolio.json
   PiperFastAPIWrapper.json
   WyomingVietnameseASR.json
+  OptimisarrDev.json
   WhisperX.json
 compose/           # multi-container stacks (one subfolder per app)
   PolyVoice/
