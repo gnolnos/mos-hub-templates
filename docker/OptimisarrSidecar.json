@@ -1,0 +1,149 @@
+{
+    "name": "Optimisarr Sidecar",
+    "repo": "ghcr.io/gnolnos/optimisarr-sidecar:dev",
+    "registry": "https://github.com/gnolnos/optimisarr/pkgs/container/optimisarr-sidecar",
+    "network": "bridge",
+    "custom_ip": null,
+    "default_shell": "bash",
+    "privileged": false,
+    "extra_parameters": "--restart=unless-stopped",
+    "post_parameters": null,
+    "cpu_set": null,
+    "web_ui_url": "http://[IP]:[PORT:8788]/",
+    "icon": "https://raw.githubusercontent.com/gnolnos/mos-hub-templates/main/images/optimisarr-dev.png",
+    "category": "Media",
+    "project": "https://github.com/gnolnos/optimisarr",
+    "support": "https://github.com/gnolnos/optimisarr/issues",
+    "readme_url": "https://github.com/gnolnos/optimisarr/blob/main/docs/setup/linux-sidecar.md",
+    "description": "Optimisarr Sidecar - remote encoding and verification worker that pairs with an Optimisarr server. Downloads job copies to its own /work scratch (no media-library mount needed) and advertises only encoders/decoders that pass real probes (CPU, Intel QSV/VA-API via /dev/dri; NVIDIA needs the host GPU runtime). DEV image tracks the gnolnos fork's dev branch. Pair once from the main server (Settings → Remote workers → Pair a sidecar); the dashboard listens on port 8788 and has no login, so keep it on a trusted network. Keep /config persistent (holds the private pairing credential - protect backups) and give /work at least twice the largest source size. Each worker needs its own config and scratch; do not scale replicas against the same volumes.",
+    "donate": "https://github.com/sponsors/gnolnos",
+    "requires": null,
+    "paths": [
+        {
+            "name": "Config directory",
+            "host": "/mnt/cache/appdata/optimisarr-sidecar",
+            "container": "/config",
+            "description": "Persistent private state: the pairing credential and transient health state. Keep it; protect backups.",
+            "required": true
+        },
+        {
+            "name": "Work directory (scratch)",
+            "host": "/mnt/cache/appdata/optimisarr-sidecar/work",
+            "container": "/work",
+            "description": "Disposable job storage; needs at least twice the largest source free. Use a fast disk, or replace with a /work tmpfs for RAM scratch.",
+            "required": true
+        }
+    ],
+    "ports": [
+        {
+            "name": "Worker WebUI",
+            "host": "8788",
+            "container": "8788",
+            "protocol": "tcp",
+            "description": "Worker dashboard + pairing page.",
+            "required": true,
+            "mask": false
+        }
+    ],
+    "variables": [
+        {
+            "name": "Worker name",
+            "key": "OPTIMISARR_WORKER_NAME",
+            "value": "Linux worker",
+            "description": "How this worker appears on the main server.",
+            "required": false,
+            "mask": false,
+            "display": "always",
+            "default": "Linux worker"
+        },
+        {
+            "name": "Concurrency",
+            "key": "OPTIMISARR_CONCURRENCY",
+            "value": "1",
+            "description": "Concurrent jobs (1-4). Budget CPU, GPU and scratch for every slot.",
+            "required": false,
+            "mask": false,
+            "display": "always",
+            "default": "1"
+        },
+        {
+            "name": "Server URL",
+            "key": "OPTIMISARR_SERVER",
+            "value": "",
+            "description": "Optional HTTP(S) address of the main Optimisarr server, reachable from inside this container (not localhost). Locks browser pairing to that server.",
+            "required": false,
+            "mask": false,
+            "display": "advanced",
+            "default": ""
+        },
+        {
+            "name": "Pairing code",
+            "key": "OPTIMISARR_PAIRING_CODE",
+            "value": "",
+            "description": "Optional one-time pairing code from the server's 'Pair a sidecar' (expires in 5 minutes); requires Server URL. Prefer pairing via the dashboard or a mounted secret.",
+            "required": false,
+            "mask": true,
+            "display": "advanced",
+            "default": ""
+        },
+        {
+            "name": "Encoder restriction",
+            "key": "OPTIMISARR_ENCODER",
+            "value": "",
+            "description": "Optional: restrict to one proven FFmpeg encoder name (e.g. hevc_qsv). Leave blank to advertise every encoder that passes its real probe.",
+            "required": false,
+            "mask": false,
+            "display": "advanced",
+            "default": ""
+        },
+        {
+            "name": "Timezone (TZ)",
+            "key": "TZ",
+            "value": "Asia/Ho_Chi_Minh",
+            "description": "Container timezone.",
+            "required": false,
+            "mask": false,
+            "display": "always",
+            "default": "Asia/Ho_Chi_Minh"
+        },
+        {
+            "name": "PUID",
+            "key": "PUID",
+            "value": "99",
+            "description": "User ID the worker runs as after dropping privileges.",
+            "required": false,
+            "mask": false,
+            "display": "advanced",
+            "default": "99"
+        },
+        {
+            "name": "PGID",
+            "key": "PGID",
+            "value": "100",
+            "description": "Group ID the worker runs as.",
+            "required": false,
+            "mask": false,
+            "display": "advanced",
+            "default": "100"
+        },
+        {
+            "name": "UMASK",
+            "key": "UMASK",
+            "value": "077",
+            "description": "Permissions mask for files the worker creates.",
+            "required": false,
+            "mask": false,
+            "display": "advanced",
+            "default": "077"
+        }
+    ],
+    "devices": [
+        {
+            "name": "Intel/AMD GPU (/dev/dri)",
+            "host": "/dev/dri",
+            "container": "/dev/dri",
+            "description": "Optional. Map the render node for Intel QSV/VA-API or AMD VA-API hardware encoding (targets /dev/dri/renderD128). Remove if the host has no /dev/dri; only proved encoders are advertised."
+        }
+    ],
+    "labels": []
+}
